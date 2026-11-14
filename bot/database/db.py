@@ -43,3 +43,17 @@ class DataBase:
             )
         finally:
             await self.close()
+
+    async def get_player(self, user_id: int):
+        await self.connect()
+        try:
+            cursor = await self.conn.execute(
+                '''
+                SELECT user_name, coins, level 
+                FROM players WHERE user_id=?
+                ''', (user_id,)
+            )
+            player = await cursor.fetchone()
+        finally:
+            await self.close()
+        return player
